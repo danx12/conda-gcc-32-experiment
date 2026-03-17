@@ -1,0 +1,39 @@
+context:
+  name: gcc_linux-32
+  version: "7.3.0"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+build:
+  number: 3
+  script:
+    - mkdir -p ${PREFIX}/bin
+    - cd ${PREFIX}/bin
+    - ln -s i686-conda_ubuntu-linux-gnu-gcc gcc
+    - ln -s i686-conda_ubuntu-linux-gnu-cc cc
+    - ln -s i686-conda_ubuntu-linux-gnu-g++ g++
+    - ln -s i686-conda_ubuntu-linux-gnu-c++ c++
+    - ln -s i686-conda_ubuntu-linux-gnu-cpp cpp
+    - ln -s i686-conda_ubuntu-linux-gnu-gcov gcov
+  run_exports:
+    strong:
+      - libgcc-ng >=7.3.0
+
+requirements:
+  run:
+    - binutils_linux-32 2.31.1
+    - gcc_impl_linux-32 ${{ version }}.*
+
+tests:
+  - script:
+      - ${CC} ${CFLAGS} -Wall tests/aligned_alloc.c -o c_aligned
+      - ./c_aligned
+    files:
+      - tests
+
+about:
+  homepage: https://gcc.gnu.org/
+  license: GPL-3.0-only
+  summary: GNU C Compiler (activation scripts)

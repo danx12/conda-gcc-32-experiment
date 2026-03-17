@@ -1,0 +1,53 @@
+context:
+  name: gcc_impl_linux-32
+  version: "7.3.0"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://ftp.gnu.org/gnu/gcc/gcc-${{ version }}/gcc-${{ version }}.tar.gz
+  sha256: 83283fd3ad1ef92965415273767cd768ef6ac81033285741f237f4803714c62c
+
+build:
+  number: 1
+  # Map binary_relocation to post_process
+  post_process:
+    - binary_relocation:
+        - bin/*
+        - lib/*.so*
+        - libexec/**/*.so*
+        - libexec/**/cc1*
+        - libexec/**/collect2
+        - libexec/**/gcc
+        - libexec/**/lto*
+        - libexec/**/plugin/gengtype
+  dynamic_linking:
+    missing_dso_allowlist:
+      - "*"
+    runpath_allowlist:
+      - "i686-conda_cos6-linux-gnu/sysroot/lib/libpthread-*.so"
+
+requirements:
+  host:
+    - binutils_impl_linux-32 2.31.1
+    - libgcc-ng >=7.3.0
+    - libstdcxx-ng >=7.3.0
+  run:
+    - binutils_impl_linux-32 2.31.1
+    - libgcc-ng >=7.3.0
+    - libstdcxx-ng >=7.3.0
+
+tests:
+  - script:
+      - CC=$(${PREFIX}/bin/*-gcc -dumpmachine)-gcc
+      - ${CC} -Wall tests/aligned_alloc.c -o c_aligned
+      - ./c_aligned
+    files:
+      - tests
+
+about:
+  homepage: https://gcc.gnu.org/
+  license: GPL
+  summary: GNU C Compiler

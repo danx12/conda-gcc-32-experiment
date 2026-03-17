@@ -1,0 +1,45 @@
+context:
+  name: binutils_impl_linux-32
+  version: "2.31.1"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  url: https://ftp.gnu.org/gnu/binutils/binutils-${{ version }}.tar.bz2
+  sha256: ffcc382695bf947da6135e7436b8ed52d991cf270db897190f19d6f9838564d0
+
+build:
+  number: 1
+  skip:
+    - "not linux-32"
+  script: build.sh
+  dynamic_linking:
+    binary_relocation:
+      - bin/*
+      - lib/*.so
+      - libexec/**/*.so*
+    missing_dso_allowlist:
+      - "*"
+
+requirements:
+  ignore_run_exports:
+    by_name:
+      - libgcc
+      - libgcc-ng
+      - libstdcxx
+      - libstdcxx-ng
+  build:
+    - gcc_linux-64
+    - make
+    - texinfo
+  host:
+    - sysroot_linux-32
+  run:
+    - sysroot_linux-32
+
+about:
+  homepage: https://www.gnu.org/software/binutils/
+  license: GPL-3.0-only
+  summary: The GNU Binutils are a collection of binary tools.

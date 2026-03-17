@@ -1,0 +1,30 @@
+context:
+  name: binutils_linux-32
+  version: "2.31.1"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+build:
+  number: 3
+  script:
+    - mkdir -p ${PREFIX}/bin
+    - cd ${PREFIX}/bin
+    - ln -s i686-conda_ubuntu-linux-gnu-ld ld
+    - ln -s i686-conda_ubuntu-linux-gnu-as as
+    - ln -s i686-conda_ubuntu-linux-gnu-ar ar
+    - ln -s i686-conda_ubuntu-linux-gnu-nm nm
+    - ln -s i686-conda_ubuntu-linux-gnu-ranlib ranlib
+    - ln -s i686-conda_ubuntu-linux-gnu-objcopy objcopy
+    - ln -s i686-conda_ubuntu-linux-gnu-objdump objdump
+    - ln -s i686-conda_ubuntu-linux-gnu-strip strip
+
+requirements:
+  run:
+    - binutils_impl_linux-32 ${{ version }}.*
+
+about:
+  homepage: https://www.gnu.org/software/binutils/
+  license: GPL-3.0-only
+  summary: The GNU Binutils (activation scripts)
