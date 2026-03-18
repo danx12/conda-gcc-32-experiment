@@ -31,7 +31,8 @@ tests:
       - ${CC} ${CFLAGS} -Wall tests/aligned_alloc.c -o c_aligned
       - ./c_aligned
     files:
-      - tests
+      recipe:
+        - tests/aligned_alloc.c
 
 about:
   homepage: https://gcc.gnu.org/

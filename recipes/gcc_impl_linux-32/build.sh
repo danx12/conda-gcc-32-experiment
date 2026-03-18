@@ -8,6 +8,9 @@ mkdir build && cd build
     --prefix=${PREFIX} \
     --target=i686-conda_ubuntu-linux-gnu \
     --with-sysroot=${PREFIX}/i686-conda_ubuntu-linux-gnu/sysroot \
+    --with-gmp=${BUILD_PREFIX} \
+    --with-mpfr=${BUILD_PREFIX} \
+    --with-mpc=${BUILD_PREFIX} \
     --enable-languages=c,c++ \
     --disable-multilib \
     --disable-nls \

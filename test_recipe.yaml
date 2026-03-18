@@ -2,7 +2,12 @@ package:
   name: test_recipe
   version: 0.1.0
 requirements:
-  ignore_run_exports:
-    dummy_field: true
+  build:
+    - make
+tests:
+  - script:
+      - exit 0
+    files:
+      dummy_field: true
 build:
   number: 0

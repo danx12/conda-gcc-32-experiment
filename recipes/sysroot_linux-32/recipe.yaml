@@ -1,22 +1,33 @@
 context:
   name: sysroot_linux-32
-  version: "2.12"
+  version: "2.31"
 
 package:
   name: ${{ name }}
   version: ${{ version }}
 
 source:
-  # Using Ubuntu 20.04 (Focal) i386 glibc as the base
-  url: http://archive.ubuntu.com/ubuntu/pool/main/g/glibc/libc6_2.31-0ubuntu9_i386.deb
-  sha256: f3508da9bcd7b052df8e30d6c82902655809b68f8210edbc907b3fdc99d9b0ab
+  - url: http://archive.ubuntu.com/ubuntu/pool/main/g/glibc/libc6_2.31-0ubuntu9_i386.deb
+    sha256: f3508da9bcd7b052df8e30d6c82902655809b68f8210edbc907b3fdc99d9b0ab
+  - url: http://archive.ubuntu.com/ubuntu/pool/main/g/glibc/libc6-dev_2.31-0ubuntu9_i386.deb
+    sha256: b125480efb9eb86e56de8e69cd6a2ddea71ce47e627b7d280d990f5f09963574
+  - url: http://archive.ubuntu.com/ubuntu/pool/main/l/linux/linux-libc-dev_5.4.0-26.30_i386.deb
+    sha256: a782a94e5306c0b8b6030d8686316a25650f611530bb2da720a49da299fc8521
 
 build:
-  number: 1
+  number: 2
   script:
     - mkdir -p ${PREFIX}/i686-conda_ubuntu-linux-gnu/sysroot
-    - ar x *.deb
-    - tar -xJf data.tar.xz -C ${PREFIX}/i686-conda_ubuntu-linux-gnu/sysroot
+    - |
+      for f in *.deb; do
+        ar x $f
+        if [ -f data.tar.xz ]; then
+          tar -xJf data.tar.xz -C ${PREFIX}/i686-conda_ubuntu-linux-gnu/sysroot
+        elif [ -f data.tar.gz ]; then
+          tar -xzf data.tar.gz -C ${PREFIX}/i686-conda_ubuntu-linux-gnu/sysroot
+        fi
+        rm -f control.tar.xz data.tar.xz control.tar.gz data.tar.gz debian-binary
+      done
 
 requirements:
   build:
